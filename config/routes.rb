@@ -33,6 +33,22 @@ Mete::Application.routes.draw do
         end
       end
     end
+    namespace :v2 do
+      resources :audits
+      resources :drinks
+      resources :barcodes
+      resources :users do
+        member do
+          post 'deposit'
+          post 'payment'
+          post 'buy'
+          post 'buy_barcode'
+        end
+        collection do
+          get 'stats'
+        end
+      end
+    end
   end
 
   # The priority is based upon order of creation:

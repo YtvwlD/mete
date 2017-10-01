@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
       format.json { head :no_content }
     end
   end
+  
+  def to_cents(big_decimal)
+    return (big_decimal * 100).round
+  end
 
   before_action :set_raven_context
 
