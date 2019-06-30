@@ -37,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
     if @user.update_attributes(user_params)
       if @user.audit != @old_audit_status
         unless @user.audit
-          @user_audits = Audit.where(:user => @user.id)
+          @user_audits = Audit.where(user: @user.id)
           @user_audits.each do |audit|
             audit.user = nil
             audit.save!

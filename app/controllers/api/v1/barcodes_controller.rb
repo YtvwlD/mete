@@ -21,11 +21,11 @@ class Api::V1::BarcodesController < ApplicationController
   def create
     @barcode = Barcode.new(barcode_params)
     if Barcode.where(id: @barcode.id).exists?
-      render json: {"error" => "This barcode does already exist."}, status: :unprocessable_entity
+      render json: { error: 'This barcode does already exist.' }, status: :unprocessable_entity
       return
     end
     unless Drink.where(id: @barcode.drink).exists?
-      render json: {"error" => "This drink does not exist."}, status: :unprocessable_entity
+      render json: { error: 'This drink does not exist.' }, status: :unprocessable_entity
       return
     end
     if @barcode.save

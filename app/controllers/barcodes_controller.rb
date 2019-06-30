@@ -22,17 +22,17 @@ class BarcodesController < ApplicationController
   def create
     @barcode = Barcode.new(barcode_params)
     if Barcode.where(id: @barcode.id).exists?
-      flash[:danger] = "This barcode does already exist."
+      flash[:danger] = 'This barcode does already exist.'
       redirect_to new_barcode_path(barcode_params)
       return
     end
     unless Drink.where(id: @barcode.drink).exists?
-      flash[:danger] = "This drink does not exist."
+      flash[:danger] = 'This drink does not exist.'
       redirect_to new_barcode_path(barcode_params)
       return
     end
     if @barcode.save
-      redirect_to barcodes_path, :flash => { :success => 'Barcode was successfully created.' }
+      redirect_to barcodes_path, flash: { success: 'Barcode was successfully created.' }
     else
       flash[:danger] = "Couldn't create the barcode. Error: #{@barcode.errors} Status: #{:unprocessable_entity}"
       redirect_to new_barcode_path
@@ -43,10 +43,10 @@ class BarcodesController < ApplicationController
   def destroy
     @barcode = Barcode.find(params[:id])
     if @barcode.destroy
-      flash[:success] = "Barcode was successfully deleted."
+      flash[:success] = 'Barcode was successfully deleted.'
       no_resp_redir barcodes_path
     else
-      redirect_to barcodes_path, :flash => { :error => "Couldn't delete the barcode. Error: #{@barcode.errors} Status: #{:unprocessable_entity}" }
+      redirect_to barcodes_path, flash: { error: "Couldn't delete the barcode. Error: #{@barcode.errors} Status: #{:unprocessable_entity}" }
     end
   end
   

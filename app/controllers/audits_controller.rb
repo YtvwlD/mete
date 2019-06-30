@@ -25,7 +25,7 @@ class AuditsController < ApplicationController
 
   private
 
-  def parse_date data
-    return Date.civil(data[:year].to_i, data[:month].to_i, data[:day].to_i)
+  def parse_date(data)
+    Date.civil(data[:year].to_i, data[:month].to_i, data[:day].to_i)
   end
 end

@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def link_to_drink_if_exists(drink)
-    drink = Drink.find_by(:id => drink)
+    drink = Drink.find_by(id: drink)
     if drink.nil?
       return "n/a"
     else

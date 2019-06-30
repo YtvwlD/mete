@@ -40,7 +40,7 @@ class Api::V1::DrinksController < ApplicationController
   # DELETE /drinks/1.json
   def destroy
     @drink = Drink.find(params[:id])
-    Barcode.where(:drink => @drink.id).each do |barcode|
+    Barcode.where(drink: @drink.id).each do |barcode|
       barcode.destroy!
     end
     if @drink.destroy

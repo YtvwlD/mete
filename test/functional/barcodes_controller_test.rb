@@ -6,41 +6,41 @@ class BarcodesControllerTest < ActionController::TestCase
     @drink = drinks(:one)
   end
   
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:barcodes)
   end
   
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
   
-  test "should get new with drink" do
-    get :new, params: {drink: @drink.id}
+  test 'should get new with drink' do
+    get :new, params: { drink: @drink.id }
     assert_response :success
   end
   
-  test "should get new with id" do
-    get :new, params: {id: @barcode.id}
+  test 'should get new with id' do
+    get :new, params: { id: @barcode.id }
     assert_response :success
   end
   
-  test "should get new with id and drink" do
-    get :new, params: {id: @barcode.id, drink: @drink.id}
+  test 'should get new with id and drink' do
+    get :new, params: { id: @barcode.id, drink: @drink.id }
   end
   
-  test "should create barcode" do
+  test 'should create barcode' do
     assert_difference('Barcode.count') do
-      post :create, params: {barcode: {id: "abcdef", drink: @drink}}
+      post :create, params: { barcode: { id: 'abcdef', drink: @drink } }
     end
     assert_redirected_to barcodes_path
   end
   
-  test "should destroy barcode" do
+  test 'should destroy barcode' do
     assert_difference('Barcode.count', -1) do
-      delete :destroy, params: {id: @barcode}
+      delete :destroy, params: { id: @barcode }
     end
     assert_redirected_to barcodes_path
   end

@@ -27,9 +27,9 @@ class DrinksController < ApplicationController
   def create
     @drink = Drink.new(drink_params)
     if @drink.save
-      redirect_to @drink, :flash => { :success => 'Drink was successfully created.' }
+      redirect_to @drink, flash: { success: 'Drink was successfully created.' }
     else
-      render action: "new", error: "Couldn't create the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}"
+      render action: 'new', error: "Couldn't create the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}"
     end
   end
 
@@ -37,25 +37,25 @@ class DrinksController < ApplicationController
   def update
     @drink = Drink.find(params[:id])
     if @drink.update_attributes(drink_params)
-      flash[:success] = "Drink was successfully updated."
+      flash[:success] = 'Drink was successfully updated.'
       no_resp_redir @drink
     else
-      render action: "edit", error: "Couldn't update the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}"
+      render action: 'edit', error: "Couldn't update the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}"
     end
   end
 
   # DELETE /drinks/1
   def destroy
     @drink = Drink.find(params[:id])
-    Barcode.where(:drink => @drink.id).each do |barcode|
+    Barcode.where(drink: @drink.id).each do |barcode|
       barcode.destroy!
-      flash[:info] = "Deleted all barcodes for this drink."
+      flash[:info] = 'Deleted all barcodes for this drink.'
     end
     if @drink.destroy
-      flash[:success] = "Drink was successfully deleted."
+      flash[:success] = 'Drink was successfully deleted.'
       no_resp_redir drinks_url
     else
-      redirect_to drinks_url, :flash => { :error => "Couldn't delete the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}" }
+      redirect_to drinks_url, flash: { error: "Couldn't delete the drink. Error: #{@drink.errors} Status: #{:unprocessable_entity}" }
     end
   end
 

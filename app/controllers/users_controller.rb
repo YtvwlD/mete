@@ -31,9 +31,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to @user, :flash => { :success => 'User was successfully created.' }
+      redirect_to @user, flash: { success: 'User was successfully created.' }
     else
-      render action: "new", error: "Couldn't create the user. Error: #{@user.errors} Status: #{:unprocessable_entity}"
+      render action: 'new', error: "Couldn't create the user. Error: #{@user.errors} Status: #{:unprocessable_entity}"
     end
   end
 
@@ -44,18 +44,18 @@ class UsersController < ApplicationController
     if @user.update_attributes(user_params)
       if @user.audit != @old_audit_status
         unless @user.audit
-          @user_audits = Audit.where(:user => @user.id)
+          @user_audits = Audit.where(user: @user.id)
           @user_audits.each do |audit|
             audit.user = nil
             audit.save!
           end
-          flash[:info] = "Deleted all your logs."
+          flash[:info] = 'Deleted all your logs.'
         end
       end
-      flash[:success] = "User was successfully updated."
+      flash[:success] = 'User was successfully updated.'
       no_resp_redir @user
     else
-      render action: "edit", error: "Couldn't update the user. Error: #{@user.errors} Status: #{:unprocessable_entity}"
+      render action: 'edit', error: "Couldn't update the user. Error: #{@user.errors} Status: #{:unprocessable_entity}"
     end
   end
 
@@ -63,17 +63,17 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
-      flash[:success] = "User was successfully deleted."
+      flash[:success] = 'User was successfully deleted.'
       no_resp_redir users_url
     else
-      redirect_to users_url, :flash => { :error => "Couldn't delete the user. Error: #{@user.errors} Status: #{:unprocessable_entity}" }
+      redirect_to users_url, flash: { error: "Couldn't delete the user. Error: #{@user.errors} Status: #{:unprocessable_entity}" }
     end
   end
 
   # GET /users/1/deposit?amount=100
   def deposit
     @user = User.find(params[:id])
-    @user.deposit(BigDecimal.new(params[:amount]))
+    @user.deposit(BigDecimal(params[:amount]))
     flash[:success] = "You just deposited some money and your new balance is #{show_amount(@user.balance)}. Thank you."
     warn_user_if_audit
     no_resp_redir @user
@@ -89,22 +89,22 @@ class UsersController < ApplicationController
   # POST /users/1/buy_barcode
   def buy_barcode
     @user = User.find(params[:id])
-    unless Barcode.where(id: params[:barcode]).exists?
-      flash[:danger] = "No drink found with this barcode."
-      redirect_to @user
-    else
+    if Barcode.where(id: params[:barcode]).exists?
       @drink = Drink.find(Barcode.find(params[:barcode]).drink)
       buy_drink
+    else
+      flash[:danger] = 'No drink found with this barcode.'
+      redirect_to @user
     end
   end
 
   # GET /users/1/pay?amount=1.5
   def payment
     @user = User.find(params[:id])
-    @user.payment(BigDecimal.new(params[:amount]))
+    @user.payment(BigDecimal(params[:amount]))
     flash[:success] = "You just bought a drink and your new balance is #{show_amount(@user.balance)}. Thank you."
-    if (@user.balance < 0) then
-      flash[:warning] = "Your balance is below zero. Remember to compensate as soon as possible."
+    if @user.balance.negative? then
+      flash[:warning] = 'Your balance is below zero. Remember to compensate as soon as possible.'
     end
     warn_user_if_audit
     no_resp_redir @user
@@ -123,12 +123,12 @@ class UsersController < ApplicationController
     unless @drink.active?
       @drink.active = true
       @drink.save!
-      flash[:info] = "The drink you just bought has been set to 'available'."
+      flash[:info] = 'The drink you just bought has been set to \'available\'.'
     end
     @user.buy(@drink)
     flash[:success] = "You just bought a drink and your new balance is #{show_amount(@user.balance)}. Thank you."
-    if (@user.balance < 0) then
-      flash[:warning] = "Your balance is below zero. Remember to compensate as soon as possible."
+    if @user.balance.negative? then
+      flash[:warning] = 'Your balance is below zero. Remember to compensate as soon as possible.'
     end
     warn_user_if_audit
     no_resp_redir @user.redirect ? redirect_path(@user) : @user
@@ -139,7 +139,7 @@ class UsersController < ApplicationController
   end
 
   def warn_user_if_audit
-    if (@user.audit) then
+    if @user.audit then
       flash[:info] = "This transaction has been logged, because you set up your account that way. #{view_context.link_to 'Change?', edit_user_url(@user)}".html_safe
     end
   end

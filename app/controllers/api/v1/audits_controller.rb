@@ -22,10 +22,10 @@ class Api::V1::AuditsController < ApplicationController
     @deposits_sum = @audits.deposits.sum(:difference)
 
     render json: {
-        :sum => @sum,
-        :payments_sum => @payments_sum,
-        :deposits_sum => @deposits_sum,
-        :audits => @audits
+        sum: @sum,
+        payments_sum: @payments_sum,
+        deposits_sum: @deposits_sum,
+        audits: @audits
     }
   end
 
